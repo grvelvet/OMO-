@@ -77,9 +77,9 @@ export const Workspace: React.FC = () => {
   return (
     <div id="appWorkspace" className="w-full flex-1 flex flex-col gap-4 min-h-0 h-full">
       
-      <div className="flex-1 flex flex-col md:flex-row gap-4 md:gap-6 min-h-0 overflow-y-auto md:overflow-visible pb-1 md:pb-0">
+      <div className="flex-1 flex flex-col gap-4 md:gap-5 min-h-0 overflow-y-auto pb-1 md:pb-0">
         {/* Исходный текст (InputCard) */}
-        <div className="flex-1 flex flex-col min-h-[220px] md:min-h-0 flex-shrink-0 md:flex-shrink bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-shadow duration-300 hover:shadow-[0_12px_40px_rgb(0,0,0,0.06)] dark:hover:shadow-none">
+        <div className="flex-1 flex flex-col min-h-[220px] flex-shrink-0 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-shadow duration-300 hover:shadow-[0_12px_40px_rgb(0,0,0,0.06)] dark:hover:shadow-none">
           <div className="flex justify-between items-center h-12 px-4 bg-slate-50/50 dark:bg-slate-900/50 flex-shrink-0">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-sans select-none">
               Исходный текст
@@ -113,7 +113,7 @@ export const Workspace: React.FC = () => {
         </div>
 
         {/* Результат (OutputCard) */}
-        <div className={`flex-1 flex-col min-h-[220px] md:min-h-0 flex-shrink-0 md:flex-shrink bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-shadow duration-300 hover:shadow-[0_12px_40px_rgb(0,0,0,0.06)] dark:hover:shadow-none ${isKeyboardOpen ? 'hidden md:flex' : 'flex'}`}>
+        <div className={`flex-1 flex-col min-h-[220px] flex-shrink-0 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-shadow duration-300 hover:shadow-[0_12px_40px_rgb(0,0,0,0.06)] dark:hover:shadow-none ${isKeyboardOpen ? 'hidden md:flex' : 'flex'}`}>
           <div className="flex justify-between items-center h-12 px-4 bg-slate-50/50 dark:bg-slate-900/50 flex-shrink-0 gap-2">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-sans select-none">
               Результат
