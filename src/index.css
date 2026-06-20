@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Custom brand colors matching the aesthetic style guidelines */
+  --color-brand-50: #f5f3ff;
+  --color-brand-100: #edd9ff;
+  --color-brand-500: #6750a4;
+  --color-brand-600: #533d8b;
+  --color-brand-900: #21104a;
+}
+
+/* Системные скроллбары */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.2);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 116, 139, 0.4);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.2);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(148, 163, 184, 0.4);
+}
+
+/* Стили подсветки изменений */
+.replaced-node {
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.08);
+  border-bottom: 2px solid rgba(239, 68, 68, 0.35);
+  padding: 0 1px;
+  font-weight: 500;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.dark .replaced-node {
+  color: #fca5a5;
+  background-color: rgba(239, 68, 68, 0.15);
+  border-bottom-color: rgba(239, 68, 68, 0.5);
+}
+
+/* Маркеры разрывов токенов */
+.token-break-node {
+  position: relative;
+  display: inline;
+}
+.show-indicators .token-break-node::after {
+  content: "•";
+  position: absolute;
+  bottom: 0.35em;
+  left: -1px;
+  color: #10b981;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 0;
+  pointer-events: none;
+}
+.dark .show-indicators .token-break-node::after {
+  color: #34d399;
+}
+
+/* Системное модальное окно <dialog> для настроек на мобильных */
+dialog#controlsModal {
+  border: none;
+  outline: none;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+dialog#controlsModal::backdrop {
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+@media (max-width: 767px) {
+  dialog#controlsModal {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    width: calc(100% - 2rem) !important;
+    max-height: 85vh !important;
+    border-radius: 1rem !important; /* rounded-2xl */
+  }
+}
+
+/* Модальное окно истории (вызывается поверх на всех экранах) */
+dialog#historyModal {
+  border: none;
+  outline: none;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  background-color: rgb(255 255 255);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+.dark dialog#historyModal {
+  background-color: rgb(15 23 42);
+}
+dialog#historyModal::backdrop {
+  background-color: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+/* Десктопная трансформация настроек в статичную панель */
+@media (min-width: 768px) {
+  dialog#controlsModal {
+    display: flex !important;
+    position: static !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 1.25rem !important; /* p-5 */
+    border-radius: 20px !important; /* rounded-2xl */
+    background-color: rgb(255 255 255) !important;
+    pointer-events: auto !important;
+    border: 1px solid rgb(226, 232, 240) !important; /* border-slate-200 */
+  }
+  .dark dialog#controlsModal {
+    background-color: rgb(15 23 42) !important; /* bg-slate-900 */
+    border-color: rgb(30, 41, 59) !important; /* border-slate-800 */
+  }
+  dialog#controlsModal::backdrop {
+    display: none !important;
+  }
+}
+
+/* Системные отступы безопасных зон */
+.safe-pt {
+  padding-top: calc(1rem + env(safe-area-inset-top));
+}
+.safe-pb {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+
+@media (max-height: 480px) {
+  .safe-pt {
+    padding-top: calc(0.35rem + env(safe-area-inset-top));
+  }
+  .safe-pb {
+    padding-bottom: calc(0.35rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 768px) {
+  .safe-pt {
+    padding-top: calc(1.5rem + env(safe-area-inset-top));
+  }
+  .safe-pb {
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 1024px) {
+  .safe-pt {
+    padding-top: calc(2rem + env(safe-area-inset-top));
+  }
+  .safe-pb {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  }
+}

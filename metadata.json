@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Omoglyph Pro",
+  "description": "Профессиональный инструмент обфускации текста с использованием омоглифов и алгоритмов разрыва сигнатур ИИ",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
