@@ -212,12 +212,49 @@ export interface ObfuscationParams {
   aiSlider: number;
   injectStrategy: 'zero-width-spaces' | 'homoglyph-only' | 'mixed';
   textStyle?: 'normal' | 'math-bold' | 'math-italic' | 'math-monospace' | 'math-script' | 'math-double-struck';
+  translitMode?: 'none' | 'cyr2lat' | 'lat2cyr';
 }
 
 export interface ObfuscationResult {
   rawOutputText: string;
   tokens: ProcessedToken[];
   diagnostics: Diagnostics;
+}
+
+const cyr2latMap: Record<string, string> = {
+  'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh', 'З': 'Z', 'И': 'I', 'Й': 'J',
+  'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O', 'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U', 'Ф': 'F',
+  'Х': 'H', 'Ц': 'C', 'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Sch', 'Ъ': '', 'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu', 'Я': 'Ya',
+  'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'j',
+  'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f',
+  'х': 'h', 'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya'
+};
+
+const lat2cyrMap: Record<string, string> = {
+  'A': 'А', 'B': 'Б', 'V': 'В', 'G': 'Г', 'D': 'Д', 'E': 'Е', 'Yo': 'Ё', 'Zh': 'Ж', 'Z': 'З', 'I': 'И', 'J': 'Й',
+  'K': 'К', 'L': 'Л', 'M': 'М', 'N': 'Н', 'O': 'О', 'P': 'П', 'R': 'Р', 'S': 'С', 'T': 'Т', 'U': 'У', 'F': 'Ф',
+  'H': 'Х', 'C': 'Ц', 'Ch': 'Ч', 'Sh': 'Ш', 'Sch': 'Щ', 'Y': 'Ы', 'Yu': 'Ю', 'Ya': 'Я',
+  'a': 'а', 'b': 'б', 'v': 'в', 'g': 'г', 'd': 'д', 'e': 'е', 'yo': 'ё', 'zh': 'ж', 'z': 'з', 'i': 'и', 'j': 'й',
+  'k': 'к', 'l': 'л', 'm': 'м', 'n': 'н', 'o': 'о', 'p': 'п', 'r': 'р', 's': 'с', 't': 'т', 'u': 'у', 'f': 'ф',
+  'h': 'х', 'c': 'ц', 'ch': 'ч', 'sh': 'ш', 'sch': 'щ', 'y': 'ы', 'yu': 'ю', 'ya': 'я'
+};
+
+function transliterateText(text: string, mode: 'cyr2lat' | 'lat2cyr'): string {
+  let result = text;
+  if (mode === 'lat2cyr') {
+    // Replace multi-char first
+    const multiChars = ['Sch', 'sch', 'Zh', 'zh', 'Ch', 'ch', 'Sh', 'sh', 'Yu', 'yu', 'Ya', 'ya', 'Yo', 'yo'];
+    for (const mc of multiChars) {
+      if (lat2cyrMap[mc]) {
+        result = result.split(mc).join(lat2cyrMap[mc]);
+      }
+    }
+    // Then single char
+    result = result.split('').map(char => lat2cyrMap[char] || char).join('');
+  } else {
+    result = result.split('').map(char => cyr2latMap[char] !== undefined ? cyr2latMap[char] : char).join('');
+  }
+  return result;
 }
 
 const mathFonts: Record<string, { latUpper: string, latLower: string, cyrMap: Record<string, string> }> = {
@@ -279,10 +316,16 @@ export function obfuscateText(params: ObfuscationParams): ObfuscationResult {
     aiSlider,
     injectStrategy,
     textStyle,
+    translitMode,
   } = params;
 
   // Приведение к прекомпозиционной схеме (NFC)
   let text = inputText.normalize('NFC');
+  
+  if (translitMode && translitMode !== 'none') {
+    text = transliterateText(text, translitMode);
+  }
+
   const normalizedSalt = keySalt || 'DEFAULT';
 
   if (!text) {

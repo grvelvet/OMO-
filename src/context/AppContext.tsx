@@ -17,6 +17,8 @@ interface AppContextType {
   setInjectStrategy: (strategy: InjectStrategy) => void;
   textStyle: TextStyle;
   setTextStyle: (style: TextStyle) => void;
+  translitMode: TranslitMode;
+  setTranslitMode: (mode: TranslitMode) => void;
   isDarkMode: boolean;
   setIsDarkMode: (val: boolean) => void;
   isHighlightEnabled: boolean;
@@ -46,6 +48,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [aiSlider, setAiSlider] = useState<number>(0);
   const [injectStrategy, setInjectStrategy] = useState<InjectStrategy>('zero-width-spaces');
   const [textStyle, setTextStyle] = useState<TextStyle>('normal');
+  const [translitMode, setTranslitMode] = useState<TranslitMode>('none');
 
   // Dark mode with OS preference compatibility
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
@@ -112,7 +115,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     aiSlider,
     injectStrategy,
     textStyle,
-  }), [computedInputText, keySalt, randomSlider, shuffleSlider, aiSlider, injectStrategy, textStyle]);
+    translitMode,
+  }), [computedInputText, keySalt, randomSlider, shuffleSlider, aiSlider, injectStrategy, textStyle, translitMode]);
 
   const generateNewKey = () => {
     const nextKey = generateSecureKey();
@@ -138,6 +142,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       aiSlider,
       injectStrategy,
       textStyle,
+      translitMode,
     };
 
     setHistoryArray((prev) => {
@@ -161,6 +166,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setAiSlider(entry.aiSlider);
     setInjectStrategy(entry.injectStrategy);
     setTextStyle(entry.textStyle || 'normal');
+    setTranslitMode(entry.translitMode || 'none');
   };
 
   return (
@@ -180,6 +186,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setInjectStrategy,
         textStyle,
         setTextStyle,
+        translitMode,
+        setTranslitMode,
         isDarkMode,
         setIsDarkMode,
         isHighlightEnabled,

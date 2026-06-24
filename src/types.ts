@@ -2,6 +2,7 @@ export type TokenType = 'text' | 'replaced' | 'token';
 
 export type InjectStrategy = 'zero-width-spaces' | 'homoglyph-only' | 'mixed';
 export type TextStyle = 'normal' | 'math-bold' | 'math-italic' | 'math-monospace' | 'math-script' | 'math-double-struck';
+export type TranslitMode = 'none' | 'cyr2lat' | 'lat2cyr';
 
 export interface ProcessedToken {
   type: TokenType;
@@ -19,6 +20,7 @@ export interface HistoryEntry {
   aiSlider: number;
   injectStrategy: InjectStrategy;
   textStyle: TextStyle;
+  translitMode: TranslitMode;
 }
 
 export interface Diagnostics {
