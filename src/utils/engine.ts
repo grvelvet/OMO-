@@ -211,7 +211,7 @@ export interface ObfuscationParams {
   shuffleSlider: number;
   aiSlider: number;
   injectStrategy: 'zero-width-spaces' | 'homoglyph-only' | 'mixed';
-  textStyle?: 'normal' | 'math-bold' | 'math-italic' | 'math-monospace' | 'math-script' | 'math-double-struck';
+  textStyle?: 'normal' | 'math-bold' | 'math-italic' | 'math-monospace' | 'math-script' | 'math-double-struck' | 'math-circled' | 'scrambled';
   translitMode?: 'none' | 'cyr2lat' | 'lat2cyr';
 }
 
@@ -282,6 +282,11 @@ const mathFonts: Record<string, { latUpper: string, latLower: string, cyrMap: Re
     latUpper: "𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ",
     latLower: "𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫",
     cyrMap: { 'А':'𝔸', 'В':'𝔹', 'Е':'𝔼', 'М':'𝕄', 'Н':'ℍ', 'О':'𝕆', 'Р':'ℙ', 'С':'ℂ', 'Т':'𝕋', 'Х':'𝕏', 'а':'𝕒', 'е':'𝕖', 'о':'𝕠', 'р':'𝕡', 'с':'𝕔', 'х':'𝕩', 'у':'𝕪' }
+  },
+  'math-circled': {
+    latUpper: "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ",
+    latLower: "ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
+    cyrMap: { 'А':'Ⓐ', 'В':'Ⓑ', 'Е':'Ⓔ', 'К':'Ⓚ', 'М':'Ⓜ', 'Н':'Ⓗ', 'О':'Ⓞ', 'Р':'Ⓟ', 'С':'Ⓒ', 'Т':'Ⓣ', 'Х':'Ⓧ', 'а':'ⓐ', 'е':'ⓔ', 'о':'ⓞ', 'р':'ⓟ', 'с':'ⓒ', 'х':'ⓧ', 'у':'ⓨ' }
   }
 };
 
@@ -388,7 +393,14 @@ export function obfuscateText(params: ObfuscationParams): ObfuscationResult {
     }
 
     if (textStyle && textStyle !== 'normal') {
-      targetChar = applyStyleToChar(targetChar, textStyle);
+      if (textStyle === 'scrambled') {
+        const styleKeys = Object.keys(mathFonts);
+        const styleRand = getStableRandomWithHash(index + 3000, charCode, saltHash);
+        const randomStyle = styleKeys[Math.floor(styleRand * styleKeys.length)];
+        targetChar = applyStyleToChar(targetChar, randomStyle);
+      } else {
+        targetChar = applyStyleToChar(targetChar, textStyle);
+      }
     }
     
     isReplaced = targetChar !== char;

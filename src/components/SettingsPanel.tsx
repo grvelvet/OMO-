@@ -318,6 +318,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                         {textStyle === 'math-monospace' && 'Моноширинный'}
                         {textStyle === 'math-script' && 'Рукописный (Script)'}
                         {textStyle === 'math-double-struck' && 'Двойной штрих (Double Struck)'}
+                        {textStyle === 'math-circled' && 'В кружочках (Circled)'}
+                        {textStyle === 'scrambled' && 'Скремблинг (Микс)'}
                       </span>
                       <ChevronDown className={`h-4 w-4 text-slate-500 dark:text-slate-400 transition-transform duration-200 ${activeDropdown === 'style' ? 'transform rotate-180' : ''}`} />
                     </button>
@@ -338,7 +340,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                             { value: 'math-italic', label: 'Курсив', preview: '𝘈𝘢', desc: 'Mathematical Italic' },
                             { value: 'math-monospace', label: 'Моноширинный', preview: '𝙰𝚊', desc: 'Mathematical Monospace' },
                             { value: 'math-script', label: 'Рукописный', preview: '𝒜𝒶', desc: 'Mathematical Script' },
-                            { value: 'math-double-struck', label: 'Двойной штрих', preview: '𝔸𝕒', desc: 'Double-struck / Blackboard' }
+                            { value: 'math-double-struck', label: 'Двойной штрих', preview: '𝔸𝕒', desc: 'Double-struck / Blackboard' },
+                            { value: 'math-circled', label: 'В кружочках', preview: 'Ⓐⓐ', desc: 'Enclosed Alphanumerics' },
+                            { value: 'scrambled', label: 'Скремблинг', preview: 'A𝕓𝘤', desc: 'Случайный стиль для букв' }
                           ].map((option) => {
                             const isSelected = textStyle === option.value;
                             return (
